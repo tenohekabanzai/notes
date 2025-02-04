@@ -30,12 +30,20 @@ public class UserService {
     }
 
     public void saveUser(User user){
-        // user.setPassword(passwordEncoder.encode(user.getPassword()));
         ur.save(user);
     }
 
     public void saveNewUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        ur.save(user);
+    }
+
+    public void saveAdmin(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        List<String> l = new ArrayList<>();
+        l.add("ADMIN");
+        l.add("USER");
+        user.setRoles(l);  
         ur.save(user);
     }
 
