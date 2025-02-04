@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.http.SessionCreationPolicy;
+
 
 import com.example.notes.service.UserDetailsServiceimpl;
 
@@ -25,23 +27,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-
         return http.authorizeHttpRequests(request -> request
-                        .requestMatchers("/public/**").permitAll()
-                        .requestMatchers("/notes/**", "/user/**").authenticated()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
-                .build();
+            .requestMatchers("/public/**").permitAll()
+            .requestMatchers("/notes/**", "/user/**").authenticated()
+            .requestMatchers("/admin/**").hasRole("ADMIN")
+            .anyRequest().authenticated())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
+        .httpBasic(Customizer.withDefaults())
+        .csrf(AbstractHttpConfigurer::disable)
+        .build();
     }
-
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

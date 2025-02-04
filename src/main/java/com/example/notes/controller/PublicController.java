@@ -1,5 +1,7 @@
 package com.example.notes.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +27,13 @@ public class PublicController {
     @PostMapping
     public void createUser(@RequestBody User user) {
         if(user.getUsername()!= null && user.getPassword() != null)
-        us.saveUser(user);
+        {
+            ArrayList<String> userList = new ArrayList<>();
+            userList.add("USER");
+            if(user.getRoles().isEmpty())
+            user.setRoles(userList);
+            us.saveNewUser(user);
+        }
     }
 
 }

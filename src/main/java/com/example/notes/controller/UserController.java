@@ -27,18 +27,13 @@ public class UserController {
     @Autowired
     private UserService us;
 
-  
-
-   
-
     @PutMapping
-    public ResponseEntity<?> updateUser(@RequestBody User user){
-        
+    public ResponseEntity<?> updateUser(@RequestBody User user)
+    {     
         org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
         String username = auth.getName();
-
         User x = us.findByUsername(username);
+        
         if(x!= null)
         {
             if(user.getUsername() != null)
@@ -47,21 +42,20 @@ public class UserController {
             x.setPassword(user.getPassword());
             if(user.getRoles()!= null)
             x.setRoles(user.getRoles());
-
+            else
+        
             us.saveUser(x);
         }   
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/user")
-    public ResponseEntity<?> deleteUserById(){
+    public ResponseEntity<?> deleteUserById()
+    {
         org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         us.deleteUser(username);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
-
-   
-
 }
